@@ -212,6 +212,9 @@ libs-$(CONFIG_FW_CFE)		+= arch/mips/fw/cfe/
 libs-$(CONFIG_FW_SNIPROM)	+= arch/mips/fw/sni/
 libs-y				+= arch/mips/fw/lib/
 
+ifeq ($(CONFIG_SOC_T40), y)
+	libs-$(CONFIG_INGENIC_ISP)     += arch/mips/xburst2/lib/isp-t40/
+endif
 #
 # Kernel compression
 #
@@ -302,6 +305,7 @@ boot-y			+= uImage.bz2
 boot-y			+= uImage.gz
 boot-y			+= uImage.lzma
 boot-y			+= uImage.lzo
+boot-y			+= uImage.zrt
 endif
 
 # compressed boot image targets (arch/mips/boot/compressed/)
@@ -341,6 +345,16 @@ all:	$(all-y)
 $(boot-y): $(vmlinux-32) FORCE
 	$(Q)$(MAKE) $(build)=arch/mips/boot VMLINUX=$(vmlinux-32) \
 		$(bootvars-y) arch/mips/boot/$@
+
+# zImage
+zImage: $(vmlinux-32) FORCE
+	$(Q)$(MAKE) $(build)=arch/mips/boot/zcompressed VMLINUX=$(vmlinux-32) $@
+	@cp arch/mips/boot/zcompressed/$@ arch/mips/boot/compressed/$@
+	@echo '  Kernel: arch/mips/boot/compressed/$@ is ready'
+xImage: $(vmlinux-32) FORCE
+	$(Q)$(MAKE) $(build)=arch/mips/boot/zcompressed VMLINUX=$(vmlinux-32) $@
+	@cp arch/mips/boot/zcompressed/$@ arch/mips/boot/compressed/$@
+	@echo '  Kernel: arch/mips/boot/compressed/$@ is ready'
 
 ifdef CONFIG_SYS_SUPPORTS_ZBOOT
 # boot/compressed
@@ -409,6 +423,7 @@ define archhelp
 	echo '  uImage.gz            - U-Boot image (gzip)'
 	echo '  uImage.lzma          - U-Boot image (lzma)'
 	echo '  uImage.lzo           - U-Boot image (lzo)'
+	echo '  xImage               - U-Boot-spl xImage (ingenic spl boot)'
 	echo '  dtbs                 - Device-tree blobs for enabled boards'
 	echo '  dtbs_install         - Install dtbs to $(INSTALL_DTBS_PATH)'
 	echo

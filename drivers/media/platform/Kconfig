@@ -54,6 +54,18 @@ config VIDEO_VIU
 	  Say Y here if you want to enable VIU device on MPC5121e Rev2+.
 	  In doubt, say N.
 
+config VIDEO_TX_ISP
+	  bool "TX ISP MODULE"
+	  select VIDEOBUF2_CORE
+	  select VIDEOBUF2_MEMOPS
+	  depends on VIDEO_V4L2 && I2C && VIDEO_V4L2_SUBDEV_API
+	  ---help---
+	  Driver for TX ISP.
+
+if VIDEO_TX_ISP && SOC_T40
+source "drivers/media/platform/tx-isp-t40/Kconfig"
+endif
+
 config VIDEO_TIMBERDALE
 	tristate "Support for timberdale Video In/LogiWIN"
 	depends on VIDEO_V4L2 && I2C && VIDEO_V4L2_SUBDEV_API && HAS_DMA
@@ -156,6 +168,30 @@ config VIDEO_MEM2MEM_DEINTERLACE
 	select V4L2_MEM2MEM_DEV
 	help
 	    Generic deinterlacing V4L2 driver.
+
+config VIDEO_INGENIC_JPEG
+        depends on VIDEO_DEV && VIDEO_V4L2
+		depends on SOC_X1000 || SOC_X2000
+	tristate "Ingenic JPEG codec driver"
+	select VIDEOBUF2_DMA_CONTIG
+	select V4L2_MEM2MEM_DEV
+	---help---
+	  This is a v4l2 driver for Ingenic X1000 codec
+
+config VIDEO_INGENIC_ROTATE
+        depends on VIDEO_DEV && VIDEO_V4L2
+		depends on SOC_X2000
+	tristate "Ingenic rotate driver"
+	select VIDEOBUF2_DMA_CONTIG
+	select V4L2_MEM2MEM_DEV
+	---help---
+	  This is a v4l2 driver for Ingenic X2000 rotate
+
+config VIDEO_INGENIC_VCODEC
+	tristate "V4L2 driver for ingenic Video Codec"
+	depends on VIDEO_DEV && VIDEO_V4L2
+	select V4L2_MEM2MEM_DEV
+	select VIDEOBUF2_DMA_CONTIG
 
 config VIDEO_SAMSUNG_S5P_G2D
 	tristate "Samsung S5P and EXYNOS4 G2D 2d graphics accelerator driver"
