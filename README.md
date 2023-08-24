@@ -17,4 +17,5 @@ Tree of branches:
   - __isvp-sdk-t31-1.1.4__ (from ISVP-SDK-T31 v1.1.4)
   - __isvp-sdk-t31-1.1.5__ (from ISVP-SDK-T31 v1.1.5)
 - __4.4.94__ (from https://cdn.kernel.org/pub/linux/kernel/v4.x/linux-4.4.94.tar.gz)
-  - __answer-t31-kernel-4.4__ (from https://gitee.com/wu-chunyu/t31-kernel-4.4/tree/master/kernel-4.4)
+  - __answer-t31-kernel-4.4__ (from https://gitee.com/wu-chunyu/t31-kernel-4.4)
+  - __answer-t31-zrt-kernel-4.4__ (from https://gitee.com/wu-chunyu/t31-zrt-kernel-4.4)
