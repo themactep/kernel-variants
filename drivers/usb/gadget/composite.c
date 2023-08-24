@@ -24,6 +24,8 @@
 
 #include "u_os_desc.h"
 
+spinlock_t disconnect_lock;
+
 /**
  * struct usb_os_string - represents OS String to be reported by a gadget
  * @bLength: total length of the entire descritor, always 0x12
@@ -1882,12 +1884,17 @@ void composite_disconnect(struct usb_gadget *gadget)
 	/* REVISIT:  should we have config and device level
 	 * disconnect callbacks?
 	 */
-	spin_lock_irqsave(&cdev->lock, flags);
+
+	// spin_lock_irqsave(&cdev->lock, flags);
+	spin_lock_irqsave(&disconnect_lock, flags);
+	
 	if (cdev->config)
 		reset_config(cdev);
 	if (cdev->driver->disconnect)
 		cdev->driver->disconnect(cdev);
-	spin_unlock_irqrestore(&cdev->lock, flags);
+
+	// spin_unlock_irqrestore(&cdev->lock, flags);
+	spin_unlock_irqrestore(&disconnect_lock, flags);
 }
 
 /*-------------------------------------------------------------------------*/
